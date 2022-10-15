@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"noEmit": true,
+		"allowJs": true,
+		"module": "ESNext",
+		"target": "ESNext",
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"moduleResolution": "node",
+		"useDefineForClassFields": true,
+		"lib": ["ESNext", "DOM"],
+		"types": [
+			"vite/client"
+		]
+	},
+	"include": [
+		"src/**/*.vue",
+		"src/**/*.ts",
+		"src/**/*.d.ts"
+	],
+	"exclude": ["dist", "node_modules"]
+}
