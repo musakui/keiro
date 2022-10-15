@@ -13,8 +13,8 @@
 					<PlaceSearchBar
 						:placeholder="placeholder"
 						@selected="onSelected"
+						@focusin="typewriter = 0"
 						@results.once="fresh = false"
-						@input.once="typewriter = false"
 					/>
 					<template #placeholder>
 						<SearchBar />
@@ -32,18 +32,59 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import SearchBar from '../components/SearchBar.vue'
 import PlaceSearchBar from '../components/PlaceSearchBar.vue'
+import { millis } from '../utils.js'
 
 const router = useRouter()
+
+/** @param {google.maps.places.AutocompletePrediction} */
 const onSelected = async ({ place_id, ...info }) => {
 	console.info('selected place', place_id, info)
 	router.push({ name: 'place', params: { place_id } })
 }
 
 const fresh = ref(true)
-const typewriter = ref(false)
+const typewriter = ref(-1)
 const placeholder = ref('search...')
+
+onMounted(async () => {
+	let lastIdx = null
+	/** @type {string[][]} */
+	const [_, words] = await Promise.all([
+		millis(1000),
+		fetch('/place_suggestions.json').then((r) => r.json()),
+	])
+	const numWords = words.length - 1
+	const randIdx = () => {
+		let idx = lastIdx
+		while (idx === lastIdx) {
+			idx = Math.floor(Math.random() * numWords)
+		}
+		lastIdx = idx
+		return idx
+	}
+	words.reverse()
+	while (typewriter.value) {
+		if (typewriter.value === -1) {
+			placeholder.value = placeholder.value.slice(0, -1)
+			if (!placeholder.value.length) {
+				await millis(500)
+				typewriter.value = 1 + randIdx()
+			}
+			await millis(100)
+		} else if (typewriter.value) {
+			const word = words[typewriter.value]
+			placeholder.value = word.slice(0, placeholder.value.length + 1)
+			if (placeholder.value === word) {
+				await millis(500)
+				typewriter.value = -1
+			}
+			await millis(150)
+		}
+	}
+	placeholder.value = 'search...'
+})
 </script>

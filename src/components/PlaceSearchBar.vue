@@ -3,7 +3,6 @@
 		<SearchBar
 			v-model:value="search.text"
 			:placeholder="placeholder"
-			autofocus
 			@keyup.self="onKey"
 		/>
 		<Transition
