@@ -34,7 +34,14 @@
 			</div>
 		</div>
 	</main>
+	<div v-if="dev" class="absolute bottom-0 right-0 p-4">
+		<RouterLink to="/search">search →</RouterLink>
+	</div>
 </template>
+
+<script setup>
+const dev = !!import.meta.hot
+</script>
 
 <style>
 .main-background {
