@@ -42,7 +42,17 @@ const router = useRouter()
 
 /** @param {google.maps.places.AutocompletePrediction} */
 const onSelected = async ({ place_id, ...info }) => {
-	console.info('selected place', place_id, info)
+	const {
+		types,
+		structured_formatting: fmt,
+	} = info
+	const { putPlace } = await import('../services/db.js')
+	await putPlace({
+		place_id,
+		name: fmt.main_text,
+		address: fmt.secondary_text,
+		types,
+	})
 	router.push({ name: 'place', params: { place_id } })
 }
 

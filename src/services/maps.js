@@ -10,14 +10,20 @@ export const maps = await init(import.meta.env.VITE_GMAPS_API_KEY, {
 	language: window.navigator?.language ?? 'ja',
 })
 
-/** somewhere in Tokyo */
+/**
+ * somewhere in Tokyo
+ * @type {google.maps.LatLngLiteral}
+ */
 export const base = { lat: 35.69, lng: 139.75 }
 
-/** Japan */
-export const bounds = new maps.LatLngBounds(...[
-	[30.1, 128.4],
-	[45.8, 146.5],
-].map(([lat, lng]) => ({ lat, lng })))
+/**
+ * Japan
+ * @type {google.maps.LatLngBoundsLiteral}
+ */
+export const bounds = {
+	south: 30.1, west: 128.4,
+	north: 45.8, east: 146.5,
+}
 
 /**
  * @param {string} input search input

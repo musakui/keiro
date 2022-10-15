@@ -90,7 +90,7 @@ debouncedWatch(() => search.text, async () => {
 	}
 	if (input.length < (ALL_ALNUM.test(input) ? 4 : 2)) return
 
-	// import('../services/db.js') // preload db module
+	import('../services/db.js') // preload db module
 	const { getPlacePredictions } = await import('../services/maps.js')
 	const results = await getPlacePredictions(input)
 	search.results = results.predictions
