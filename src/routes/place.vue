@@ -6,22 +6,24 @@
 				{{ place }}
 			</div>
 		</div>
-		<div v-else>Loading...</div>
+		<div v-else>{{ t('loading') }}</div>
 	</main>
 	<div class="absolute bottom-0 left-0 p-4">
-		<RouterLink to="/places">← saved places</RouterLink>
+		<RouterLink to="/places">← {{ t('pageLinks.places') }}</RouterLink>
 	</div>
 </template>
 
 <script setup>
 import { reactive, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getPlaceDetails } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
 
 const MS_TO_MINUTES = 60 * 1000
 const lastUpdatedMinutes = (t) => (new Date() - t) / MS_TO_MINUTES
 
+const { t } = useI18n()
 const route = useRoute()
 const place = reactive({
 	name: null,

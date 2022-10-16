@@ -6,7 +6,7 @@
 			move-class="transition"
 		>
 			<div v-if="fresh" key="headspace" class="mt-20 mb-2">
-				Where do you want to go?
+				{{ t('searchPrompt') }}
 			</div>
 			<div key="search">
 				<ClientOnly>
@@ -24,20 +24,22 @@
 		</TransitionGroup>
 	</main>
 	<div class="absolute bottom-0 left-0 p-4">
-		<RouterLink to="/about">← about</RouterLink>
+		<RouterLink to="/about">← {{ t('pageLinks.about') }}</RouterLink>
 	</div>
 	<div class="absolute bottom-0 right-0 p-4">
-		<RouterLink to="/places">saved places →</RouterLink>
+		<RouterLink to="/places">{{ t('pageLinks.places') }} →</RouterLink>
 	</div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import SearchBar from '../components/SearchBar.vue'
 import PlaceSearchBar from '../components/PlaceSearchBar.vue'
 import { millis } from '../utils.js'
 
+const { t } = useI18n()
 const router = useRouter()
 
 /** @param {google.maps.places.AutocompletePrediction} */
@@ -98,3 +100,14 @@ onMounted(async () => {
 	placeholder.value = 'search...'
 })
 </script>
+
+<i18n>
+{
+	'en': {
+		searchPrompt: 'Where do you want to go?',
+	},
+	'ja': {
+		searchPrompt: 'どこに行きたい？',
+	},
+}
+</i18n>
