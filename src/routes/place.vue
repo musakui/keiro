@@ -1,10 +1,19 @@
 <template>
 	<main class="p-4">
-		<div v-if="place.name">
+		<div v-if="place.name" class="flex flex-col gap-2">
 			<h1 class="mb-2 text-lg">📍 {{ place.name }}</h1>
-			<div class="p-4 rounded bg-gray-800">
-				{{ place }}
+			<div class="p-1 rounded bg-gray-800">
+				<MapView
+					class="h-[250px]"
+					:lat="place.lat"
+					:lng="place.lng"
+					:zoom="15"
+				></MapView>
 			</div>
+			<details class="p-4 rounded bg-gray-800">
+				<summary>details</summary>
+				{{ place }}
+			</details>
 		</div>
 		<div v-else>{{ t('loading') }}</div>
 	</main>
@@ -19,6 +28,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getPlaceDetails } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
+import MapView from '../components/MapView.vue'
 
 const MS_TO_MINUTES = 60 * 1000
 const lastUpdatedMinutes = (t) => (new Date() - t) / MS_TO_MINUTES
@@ -27,6 +37,9 @@ const { t } = useI18n()
 const route = useRoute()
 const place = reactive({
 	name: null,
+	lat: 0,
+	lng: 0,
+	viewport: null,
 })
 
 watchEffect(async () => {
