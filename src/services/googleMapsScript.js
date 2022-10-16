@@ -3,7 +3,7 @@ const CALLBACK_FN = 'initMaps'
 
 /**
  * @param {string} key Google Maps API Key
- * @param {object} [opts] https://developers.google.com/maps/documentation/javascript/url-params
+ * @param {object} [opts] [URL Params](https://developers.google.com/maps/documentation/javascript/url-params)
  * @param {string} [opts.v] release channel
  * @param {string} [opts.region] region code
  * @param {string} [opts.language] map language
