@@ -1,5 +1,5 @@
-import colors from 'windicss/colors'
 import { init } from './googleMapsScript.js'
+import * as colors from 'virtual:windi-colors'
 
 let gmap =/** @type {google.maps.Map} */(null)
 let transitLayer =/** @type {google.maps.TransitLayer} */(null)
@@ -37,19 +37,19 @@ export const bounds = {
 const mapStyle = (featureType, elementType, ...stylers) => ({ featureType, elementType, stylers })
 
 const styles = [
-	mapStyle('all', 'labels.text.stroke', { color: colors.gray[900] }),
-	mapStyle('all', 'labels.text.fill', { color: colors.gray[100] }),
-	mapStyle('landscape', 'all', { color: colors.gray[800] }),
-	mapStyle('water', 'all', { color: colors.slate[900] }),
-	mapStyle('poi', 'geometry', { color: colors.cyan[900] }),
-	mapStyle('transit', 'geometry.stroke', { color: colors.green[600] }),
-	mapStyle('transit', 'geometry.fill', { color: colors.green[900] }),
-	mapStyle('road.highway', 'geometry.stroke', { color: colors.yellow[900] }),
+	mapStyle('all', 'labels.text.stroke', { color: colors.gray900 }),
+	mapStyle('all', 'labels.text.fill', { color: colors.gray100 }),
+	mapStyle('landscape', 'all', { color: colors.gray800 }),
+	mapStyle('water', 'all', { color: colors.slate900 }),
+	mapStyle('poi', 'geometry', { color: colors.cyan900 }),
+	mapStyle('transit', 'geometry.stroke', { color: colors.green600 }),
+	mapStyle('transit', 'geometry.fill', { color: colors.green900 }),
+	mapStyle('road.highway', 'geometry.stroke', { color: colors.yellow900 }),
 	mapStyle('road.highway', 'geometry.fill', { color: colors.black }),
-	mapStyle('road.arterial', 'geometry.stroke', { color: colors.amber[900] }),
+	mapStyle('road.arterial', 'geometry.stroke', { color: colors.amber900 }),
 	mapStyle('road.arterial', 'geometry.fill', { color: colors.black }),
-	mapStyle('road.local', 'geometry', { color: colors.gray[900] }),
-	mapStyle('administrative', 'geometry.stroke', { color: colors.sky[900] }),
+	mapStyle('road.local', 'geometry', { color: colors.gray900 }),
+	mapStyle('administrative', 'geometry.stroke', { color: colors.sky900 }),
 	mapStyle('administrative', 'geometry.fill', { color: colors.black }),
 ]
 
@@ -67,7 +67,7 @@ export const useMap = (el) => {
 		center: base,
 		disableDefaultUI: true,
 		keyboardShortcuts: false,
-		backgroundColor: colors.dark[800],
+		backgroundColor: colors.dark800,
 		restriction: {
 			strictBounds: false,
 			latLngBounds: bounds,
