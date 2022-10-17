@@ -4,7 +4,13 @@ export default function colorsPlugin() {
 	const vmId = 'virtual:windi-colors'
 	const resolvedVMId = '\0' + vmId
 
-	const vf = Object.entries(colors).flatMap(([c, v]) => {
+	const ignore = new Set([
+		'lightBlue', 'warmGray', 'trueGray', 'coolGray', 'blueGray', 'zink',
+	])
+
+	const vf = Object.keys(colors).flatMap((c) => {
+		if (ignore.has(c)) return []
+		const v = colors[c]
 		const base = `export const ${c} = ${JSON.stringify(v)}`
 		return (typeof v === 'string') ? [base] : [
 			base,
