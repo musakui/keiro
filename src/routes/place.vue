@@ -1,14 +1,42 @@
 <template>
 	<main class="p-4">
 		<div v-if="place.name" class="flex flex-col gap-2">
-			<h1 class="mb-2 text-lg">📍 {{ place.name }}</h1>
-			<div class="p-1 rounded bg-gray-800">
-				<MapView
-					class="h-[250px]"
-					:lat="place.lat"
-					:lng="place.lng"
-					:zoom="15"
-				></MapView>
+			<h1 class="text-lg">📍 {{ place.savedName || place.name }}</h1>
+			<div class="grid grid-cols-1 sm:grid-cols-[2fr,1fr] items-start gap-2">
+				<div class="p-1 rounded bg-gray-800">
+					<MapView
+						class="h-[60vh]"
+						:lat="place.lat"
+						:lng="place.lng"
+						:zoom="15"
+					></MapView>
+				</div>
+				<div class="flex flex-wrap items-end justify-end gap-2">
+					<div class="relative flex-grow">
+						<button
+							class="absolute right-1 bottom-1 px-2 py-1 rounded bg-blue-800"
+							:disabled="!place.name || loading"
+							@click="savePlaceName(savedAs)"
+						>
+							{{ t('save') }}
+						</button>
+						<label class="flex flex-wrap items-center gap-2">
+							name
+							<input
+								v-model="savedAs"
+								class="p-2 rounded flex-grow bg-gray-800"
+							/>
+						</label>
+					</div>
+					<button
+						v-if="place.savedName"
+						class="mb-1 px-2 py-1 rounded bg-red-900"
+						:disabled="loading"
+						@click="savePlaceName()"
+					>
+						{{ t('remove') }}
+					</button>
+				</div>
 			</div>
 			<details class="p-4 rounded bg-gray-800">
 				<summary>details</summary>
@@ -23,8 +51,9 @@
 </template>
 
 <script setup>
-import { reactive, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, reactive, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import { useI18n } from 'vue-i18n'
 import { getPlaceDetails } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
@@ -35,11 +64,27 @@ const lastUpdatedMinutes = (t) => (new Date() - t) / MS_TO_MINUTES
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
+
+const savedAs = ref('')
+const loading = ref(false)
 const place = reactive({
 	name: null,
 	lat: 0,
 	lng: 0,
 	viewport: null,
+})
+
+const savePlaceName = async (savedName) => {
+	loading.value = true
+	const pl = await getPlace(place.place_id)
+	await putPlace({ ...pl, savedName })
+	place.savedName = savedName
+	loading.value = false
+}
+
+useHead({
+	title: () => `keiro | ${place.savedName || place.name}`,
 })
 
 watchEffect(async () => {
@@ -48,8 +93,11 @@ watchEffect(async () => {
 	const pl = await getPlace(pid)
 	if (pl) Object.assign(place, pl)
 	if (!(await getPlaceDetails(pid))) {
-		// no such place
+		router.push({ name: 'search', hash: '#not-found' })
 		return
+	}
+	if (pl && pl.name) {
+		savedAs.value = pl.savedName || pl.name
 	}
 	if (pl?.lat && (lastUpdatedMinutes(pl.updated) < 10)) return
 	const details = await getPlaceDetails(pid, {
@@ -73,3 +121,16 @@ watchEffect(async () => {
 	Object.assign(place, updatedValue)
 })
 </script>
+
+<i18n>
+{
+	'en': {
+		save: 'Save',
+		remove: 'Remove',
+	},
+	'ja': {
+		save: '保存',
+		remove: '削除',
+	},
+}
+</i18n>

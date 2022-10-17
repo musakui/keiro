@@ -2,7 +2,7 @@
 	<main class="p-4">
 		<h1 class="mb-2 text-lg">{{ t('title') }}</h1>
 		<ClientOnly>
-			Place List
+			<PlaceList></PlaceList>
 			<template #placeholder>{{ t('loading') }}</template>
 		</ClientOnly>
 	</main>
@@ -13,7 +13,12 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@vueuse/head'
+import PlaceList from '../components/PlaceList.vue'
 const { t } = useI18n()
+useHead({
+	title: () => `keiro | ${t('title')}`,
+})
 </script>
 
 <i18n>
