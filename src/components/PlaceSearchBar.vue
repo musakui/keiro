@@ -92,8 +92,12 @@ debouncedWatch(() => search.text, async () => {
 
 	import('../services/db.js') // preload db module
 	const { getPlacePredictions } = await import('../services/maps.js')
-	const results = await getPlacePredictions(input)
-	search.results = results.predictions
-	emit('results', search.results)
+	try {
+		const results = await getPlacePredictions(input)
+		search.results = results.predictions
+		emit('results', search.results)
+	} catch (err) {
+		console.log(err)
+	}
 }, { debounce: 500, maxWait: 1000 })
 </script>

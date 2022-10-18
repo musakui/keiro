@@ -42,6 +42,7 @@ const styles = [
 	mapStyle('landscape', 'all', { color: colors.gray800 }),
 	mapStyle('water', 'all', { color: colors.slate900 }),
 	mapStyle('poi', 'geometry', { color: colors.cyan900 }),
+	mapStyle('poi', 'labels', { visibility: 'off' }),
 	mapStyle('transit', 'geometry.stroke', { color: colors.green600 }),
 	mapStyle('transit', 'geometry.fill', { color: colors.green900 }),
 	mapStyle('road.highway', 'geometry.stroke', { color: colors.yellow900 }),
@@ -51,6 +52,7 @@ const styles = [
 	mapStyle('road.local', 'geometry', { color: colors.gray900 }),
 	mapStyle('administrative', 'geometry.stroke', { color: colors.sky900 }),
 	mapStyle('administrative', 'geometry.fill', { color: colors.black }),
+	mapStyle('administrative', 'labels', { lightness: -50 }),
 ]
 
 /**
