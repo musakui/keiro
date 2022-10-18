@@ -1,0 +1,9 @@
+{
+	"pageLinks": {
+		"search": "find places",
+		"places": "saved places",
+		"about": "about"
+	},
+	"loading": "loading...",
+	"back": "Back"
+}

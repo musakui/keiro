@@ -6,6 +6,7 @@ const cors = {
 	'Access-Control-Allow-Headers': 'Content-Type,Host,Date,Digest,Signature',
 }
 
+/** @type {import('@netlify/functions').Handler} */
 export const handler = async (evt, ctx) => {
 	const method = evt.httpMethod
 	if (method === 'OPTIONS') {
@@ -15,7 +16,7 @@ export const handler = async (evt, ctx) => {
 		}
 	}
 
-	console.log(method, evt.rawUrl)
+	console.log(method, evt.queryStringParameters)
 
 	return {
 		statusCode: 200,

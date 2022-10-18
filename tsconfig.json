@@ -3,6 +3,7 @@
 		"strict": true,
 		"noEmit": true,
 		"allowJs": true,
+		"jsx": "preserve",
 		"module": "ESNext",
 		"target": "ESNext",
 		"skipLibCheck": true,
@@ -13,6 +14,7 @@
 		"useDefineForClassFields": true,
 		"lib": ["ESNext", "DOM"],
 		"types": [
+			"@types/google.maps",
 			"vite/client"
 		]
 	},
