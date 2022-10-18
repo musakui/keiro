@@ -4,12 +4,7 @@
 			<h1 class="text-lg">📍 {{ place.savedName || place.name }}</h1>
 			<div class="grid grid-cols-1 sm:grid-cols-[2fr,1fr] items-start gap-2">
 				<div class="p-1 rounded bg-gray-800">
-					<MapView
-						class="h-[60vh]"
-						:lat="place.lat"
-						:lng="place.lng"
-						:zoom="15"
-					></MapView>
+					<MapView class="h-[60vh]" @ready="init"></MapView>
 				</div>
 				<div class="flex flex-wrap items-end justify-end gap-2">
 					<div class="relative flex-grow">
@@ -24,7 +19,7 @@
 							name
 							<input
 								v-model="savedAs"
-								class="p-2 rounded flex-grow bg-gray-800"
+								class="p-2 pr-14 rounded flex-grow bg-gray-800"
 							/>
 						</label>
 					</div>
@@ -51,13 +46,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, watchEffect } from 'vue'
+import { ref, shallowRef, reactive, watchEffect, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { useI18n } from 'vue-i18n'
-import { getPlaceDetails } from '../services/maps.js'
+import { maps, getPlaceDetails } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
 import MapView from '../components/MapView.vue'
+
+let marker =/** @type {google.maps.Marker} */(null)
 
 const MS_TO_MINUTES = 60 * 1000
 const lastUpdatedMinutes = (t) => (new Date() - t) / MS_TO_MINUTES
@@ -75,6 +72,16 @@ const place = reactive({
 	viewport: null,
 })
 
+const mapRef = shallowRef(/** @type {google.maps.Map} */(null))
+
+/**
+ * @param {google.maps.Map} map
+ */
+const init = (map) => {
+	map.setZoom(15)
+	mapRef.value = map
+}
+
 const savePlaceName = async (savedName) => {
 	loading.value = true
 	const pl = await getPlace(place.place_id)
@@ -85,6 +92,28 @@ const savePlaceName = async (savedName) => {
 
 useHead({
 	title: () => `keiro | ${place.savedName || place.name}`,
+})
+
+watchEffect(() => {
+	if (mapRef.value && place.lat) {
+		const position = { lat: place.lat, lng: place.lng }
+		const title = place.savedName || place.name
+		mapRef.value.panTo(position)
+		marker = new maps.Marker({
+			title, position,
+			map: mapRef.value,
+		})
+		const infoWindow = new google.maps.InfoWindow({
+			content: `<div class="text-black">${title}</div>`,
+			map: mapRef.value,
+		})
+		marker.addListener('click', () => {
+			infoWindow.open({
+				anchor: marker,
+				map: mapRef.value,
+			})
+		})
+	}
 })
 
 watchEffect(async () => {
@@ -119,6 +148,10 @@ watchEffect(async () => {
 		...updatedValue,
 	})
 	Object.assign(place, updatedValue)
+})
+
+onUnmounted(() => {
+	marker?.setMap(null)
 })
 </script>
 
