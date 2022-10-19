@@ -103,17 +103,29 @@ export const getPlacePredictions = (input) => {
 	})
 }
 
+export const getPlaceService = () => {
+	if (!placeService) {
+		placeService = new maps.places.PlacesService(document.createElement('div'))
+	}
+
+	return placeService
+}
+
 /**
  * @param {string} placeId place ID
  * @param {Partial<google.maps.places.PlaceDetailsRequest>} opts
  * @return {Promise<google.maps.places.PlaceResult>}
  */
 export const getPlaceDetails = (placeId, opts) => new Promise((resolve) => {
-	if (!placeService) {
-		placeService = new maps.places.PlacesService(document.createElement('div'))
-	}
-
-	placeService.getDetails({
+	getPlaceService().getDetails({
 		placeId, fields: ['place_id'], ...opts,
 	}, (r) => resolve(r))
+})
+
+/**
+ * @param {Partial<google.maps.places.PlaceSearchRequest>} opts
+ * @return {Promise<google.maps.places.PlaceResult[]>}
+ */
+export const nearbySearch = (opts) => new Promise((resolve) => {
+	getPlaceService().nearbySearch(opts, (r) => resolve(r))
 })

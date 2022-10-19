@@ -33,6 +33,9 @@
 					</button>
 				</div>
 			</div>
+			<div class="flex flex-wrap gap-2">
+				<button @click="getStations">stations</button>
+			</div>
 			<details class="p-4 rounded bg-gray-800">
 				<summary>details</summary>
 				{{ place }}
@@ -50,7 +53,7 @@ import { ref, shallowRef, reactive, watchEffect, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { useI18n } from 'vue-i18n'
-import { maps, getPlaceDetails } from '../services/maps.js'
+import { maps, getPlaceDetails, nearbySearch } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
 import MapView from '../components/MapView.vue'
 
@@ -82,12 +85,32 @@ const init = (map) => {
 	mapRef.value = map
 }
 
+/** @param {string} savedName */
 const savePlaceName = async (savedName) => {
 	loading.value = true
 	const pl = await getPlace(place.place_id)
 	await putPlace({ ...pl, savedName })
 	place.savedName = savedName
 	loading.value = false
+}
+
+const stationTypes = new Set([
+	'bus_station',
+	'train_station',
+	'subway_station',
+	'transit_station',
+	'light_rail_station',
+])
+
+const getStations = async () => {
+	if (!place.lat) return
+	const results = await nearbySearch({
+		keyword: '駅',
+		rankBy: maps.places.RankBy.DISTANCE,
+		location: { lat: place.lat, lng: place.lng },
+	})
+	const stations = results.filter((r) => r.types?.some((t) => stationTypes.has(t)))
+	console.log(stations, results)
 }
 
 useHead({
@@ -98,20 +121,19 @@ watchEffect(() => {
 	if (mapRef.value && place.lat) {
 		const position = { lat: place.lat, lng: place.lng }
 		const title = place.savedName || place.name
+		const map = mapRef.value
 		mapRef.value.panTo(position)
 		marker = new maps.Marker({
-			title, position,
-			map: mapRef.value,
+			map,
+			title,
+			position,
 		})
 		const infoWindow = new google.maps.InfoWindow({
+			map,
 			content: `<div class="text-black">${title}</div>`,
-			map: mapRef.value,
 		})
 		marker.addListener('click', () => {
-			infoWindow.open({
-				anchor: marker,
-				map: mapRef.value,
-			})
+			infoWindow.open({ anchor: marker, map })
 		})
 	}
 })
