@@ -1,43 +1,51 @@
 import { openDB } from 'idb/with-async-ittr'
+import { idbName, idbVersion } from '../config.js'
 
-/** @type {import('idb').IDBPDatabase<import('./schema').KeiroDB} */
-export const db = await openDB('keiro-db', 1, {
-	upgrade (db) {
-		const places = db.createObjectStore('places', {
-			keyPath: 'place_id',
-		})
-		const nodes = db.createObjectStore('nodes', {
-			autoIncrement: true,
-		})
-		const edges = db.createObjectStore('edges', {
-			keyPath: [
-				'srcId',
-				'dstId',
-				'depart',
-				'arrive',
-			],
-		})
-		const paths = db.createObjectStore('paths', {
-			autoIncrement: true,
-		})
+/** @typedef {import('idb').IDBPDatabase<import('./schema').KeiroDB} IKeiroDB */
 
-		const uniqueFalse = { unique: false }
+const uniqueFalse = /* #__PURE__ */ { unique: false }
 
-		places.createIndex('geo', ['lat', 'lng'], uniqueFalse)
-		places.createIndex('saved', 'savedName', { unique: true })
-		places.createIndex('updated', 'updated', uniqueFalse)
+/** @param {IKeiroDB} db */
+const initDb = (db) => {
+	const places = db.createObjectStore('places', {
+		keyPath: 'place_id',
+	})
+	const nodes = db.createObjectStore('nodes', {
+		autoIncrement: true,
+	})
+	const edges = db.createObjectStore('edges', {
+		keyPath: [
+			'srcId',
+			'dstId',
+			'depart',
+			'arrive',
+		],
+	})
+	const paths = db.createObjectStore('paths', {
+		autoIncrement: true,
+	})
 
-		nodes.createIndex('place', 'place', uniqueFalse)
-		nodes.createIndex('updated', 'updated', uniqueFalse)
+	places.createIndex('geo', ['lat', 'lng'], uniqueFalse)
+	places.createIndex('saved', 'savedName', { unique: true })
+	places.createIndex('updated', 'updated', uniqueFalse)
 
-		edges.createIndex('srcdst', ['srcId', 'dstId'], uniqueFalse)
-		edges.createIndex('depart', ['srcId', 'depart'], uniqueFalse)
-		edges.createIndex('arrive', ['dstId', 'arrive'], uniqueFalse)
-		edges.createIndex('priority', 'priority', uniqueFalse)
-		edges.createIndex('updated', 'updated')
+	nodes.createIndex('place', 'place', uniqueFalse)
+	nodes.createIndex('updated', 'updated', uniqueFalse)
 
-		paths.createIndex('priority', 'priority', uniqueFalse)
-		paths.createIndex('updated', 'updated', uniqueFalse)
+	edges.createIndex('srcdst', ['srcId', 'dstId'], uniqueFalse)
+	edges.createIndex('depart', ['srcId', 'depart'], uniqueFalse)
+	edges.createIndex('arrive', ['dstId', 'arrive'], uniqueFalse)
+	edges.createIndex('priority', 'priority', uniqueFalse)
+	edges.createIndex('updated', 'updated')
+
+	paths.createIndex('priority', 'priority', uniqueFalse)
+	paths.createIndex('updated', 'updated', uniqueFalse)
+}
+
+/** @type {IKeiroDB} */
+export const db = await openDB(idbName, idbVersion, {
+	upgrade(d) {
+		initDb(d)
 	},
 })
 

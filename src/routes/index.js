@@ -19,6 +19,10 @@ const routes = [
 		path: '/places', name: 'places',
 		component: () => import('./places.vue'),
 	},
+	...(__NETLIFY_PROD__ ? [] : [{
+		path: '/admin', name: 'admin',
+		component: () => import('./admin.vue'),
+	}]),
 	{ path: '/:m(.*)', redirect: '/' },
 ]
 

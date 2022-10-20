@@ -22,6 +22,7 @@ export default defineConfig({
 	],
 	define: {
 		__INTLIFY_PROD_DEVTOOLS__: false,
+		__NETLIFY_PROD__: process.env.CONTEXT === 'production',
 	},
 	build: {
 		target: 'esnext',

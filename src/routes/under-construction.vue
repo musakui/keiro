@@ -1,5 +1,5 @@
 <template>
-	<main class="w-full">
+	<main v-once class="w-full">
 		<div class="flex justify-center h-screen">
 			<div class="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2">
 				<div class="flex flex-col">

@@ -9,7 +9,7 @@ export const createApp = ViteSSG(App, routerConfig, (ctx) => {
 		legacy: false,
 		locale: globalThis.navigator?.language ?? 'en',
 		messages,
-		...(import.meta.env.DEV ? {
+		...(import.meta.hot ? {
 			missingWarn: false,
 			fallbackWarn: false,
 		} : null),
