@@ -33,8 +33,23 @@
 					</button>
 				</div>
 			</div>
-			<div class="flex flex-wrap gap-2">
-				<button @click="getStations">stations</button>
+			<div class="flex flex-wrap gap-2 p-3 rounded bg-gray-800">
+				<button class="px-2 py-1 rounded bg-blue-700" @click="getStations">get stations</button>
+				<div v-if="stations.length" class="w-full">
+					<table class="w-full">
+						<tr>
+							<th>dist (m)</th>
+							<th>loc</th>
+							<th>name</th>
+						</tr>
+						<tr v-for="s of stations">
+							<td class="text-right">{{ s.dist }}</td>
+							<td class="text-right">{{ s.location.lat.toFixed(4) }}, {{ s.location.lng.toFixed(4) }}</td>
+							<td class="max-w-50 pl-2 truncate">{{ s.name }}</td>
+						</tr>
+					</table>
+				</div>
+				<div v-else>no results yet</div>
 			</div>
 			<details class="p-4 rounded bg-gray-800">
 				<summary>details</summary>
@@ -43,7 +58,7 @@
 		</div>
 		<div v-else>{{ t('loading') }}</div>
 	</main>
-	<div class="absolute bottom-0 left-0 p-4">
+	<div class="fixed bottom-0 left-0 p-4">
 		<RouterLink to="/places">← {{ t('pageLinks.places') }}</RouterLink>
 	</div>
 </template>
@@ -55,6 +70,7 @@ import { useHead } from '@vueuse/head'
 import { useI18n } from 'vue-i18n'
 import { maps, getPlaceDetails, nearbySearch } from '../services/maps.js'
 import { getPlace, putPlace } from '../services/db.js'
+import { haversineDistance } from '../utils.js'
 import MapView from '../components/MapView.vue'
 
 let marker =/** @type {google.maps.Marker} */(null)
@@ -68,6 +84,7 @@ const router = useRouter()
 
 const savedAs = ref('')
 const loading = ref(false)
+const stations = ref([])
 const place = reactive({
 	name: null,
 	lat: 0,
@@ -104,13 +121,29 @@ const stationTypes = new Set([
 
 const getStations = async () => {
 	if (!place.lat) return
+	stations.value = []
+	const seen = new Map()
+	const location = { lat: place.lat, lng: place.lng }
 	const results = await nearbySearch({
+		location,
+		radius: 1000,
 		keyword: '駅',
-		rankBy: maps.places.RankBy.DISTANCE,
-		location: { lat: place.lat, lng: place.lng },
+		language: 'ja',
 	})
-	const stations = results.filter((r) => r.types?.some((t) => stationTypes.has(t)))
-	console.log(stations, results)
+	for (const { place_id, types, name, ...r } of results) {
+		if (seen.has(place_id)) continue
+		if (!types?.some((t) => stationTypes.has(t))) continue
+		const loc = r.geometry.location.toJSON()
+		const dist = Math.floor(haversineDistance(location, loc) * 1000)
+		seen.set(place_id, {
+			place_id,
+			dist,
+			name,
+			types,
+			location: loc,
+		})
+	}
+	stations.value = [...seen.values()].sort((a, b) => a.dist - b.dist)
 }
 
 useHead({
