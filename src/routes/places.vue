@@ -6,7 +6,7 @@
 			<template #placeholder>{{ t('loading') }}</template>
 		</ClientOnly>
 	</main>
-	<div class="absolute bottom-0 left-0 p-4">
+	<div class="fixed bottom-0 left-0 p-4">
 		<RouterLink to="/search">← {{ t('pageLinks.search') }}</RouterLink>
 	</div>
 </template>

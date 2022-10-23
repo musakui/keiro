@@ -1,0 +1,7 @@
+{
+  "installDependencies": true,
+  "startCommand": "npm run dev",
+  "env": {
+		"VITE_GMAPS_API_KEY": "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg"
+  }
+}

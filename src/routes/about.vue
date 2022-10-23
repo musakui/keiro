@@ -3,7 +3,7 @@
 		<h1 class="mb-2 text-lg">{{ t('title') }}</h1>
 		<p>lorem ipsum dolor si amet</p>
 	</main>
-	<div class="absolute bottom-0 right-0 p-4">
+	<div class="fixed bottom-0 right-0 p-4">
 		<RouterLink to="/search">{{ t('pageLinks.search') }} →</RouterLink>
 	</div>
 </template>
