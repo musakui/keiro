@@ -7,7 +7,7 @@
 		</ClientOnly>
 	</main>
 	<div class="fixed bottom-0 left-0 p-4">
-		<RouterLink to="/search">← {{ t('pageLinks.search') }}</RouterLink>
+		<RouterLink to="/search/">← {{ t('pageLinks.search') }}</RouterLink>
 	</div>
 </template>
 

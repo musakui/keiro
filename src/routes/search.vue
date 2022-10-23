@@ -24,10 +24,10 @@
 		</TransitionGroup>
 	</main>
 	<div class="absolute bottom-0 left-0 p-4">
-		<RouterLink to="/about">← {{ t('pageLinks.about') }}</RouterLink>
+		<RouterLink to="/about/">← {{ t('pageLinks.about') }}</RouterLink>
 	</div>
 	<div class="absolute bottom-0 right-0 p-4">
-		<RouterLink to="/places">{{ t('pageLinks.places') }} →</RouterLink>
+		<RouterLink to="/places/">{{ t('pageLinks.places') }} →</RouterLink>
 	</div>
 </template>
 

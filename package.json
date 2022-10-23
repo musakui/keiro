@@ -23,9 +23,9 @@
 	"devDependencies": {
 		"@intlify/vite-plugin-vue-i18n": "^7.0.0-beta.4",
 		"@types/google.maps": "^3.50.0",
-		"@vitejs/plugin-vue": "^3.2.0-beta.0",
+		"@vitejs/plugin-vue": "^3.1.2",
 		"critters": "^0.0.16",
-		"vite": "^3.2.0-beta.3",
+		"vite": "^3.1.8",
 		"vite-plugin-windicss": "^1.8.5",
 		"vite-ssg": "^0.21.0",
 		"windicss": "^3.5.5"

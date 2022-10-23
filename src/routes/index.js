@@ -4,11 +4,11 @@ const routes = [
 		component: () => import('./under-construction.vue'),
 	},
 	{
-		path: '/about', name: 'about',
+		path: '/about/', name: 'about',
 		component: () => import('./about.vue'),
 	},
 	{
-		path: '/search', name: 'search',
+		path: '/search/', name: 'search',
 		component: () => import('./search.vue'),
 	},
 	{
@@ -16,7 +16,7 @@ const routes = [
 		component: () => import('./place.vue'),
 	},
 	{
-		path: '/places', name: 'places',
+		path: '/places/', name: 'places',
 		component: () => import('./places.vue'),
 	},
 	...(__NETLIFY_PROD__ ? [] : [{
@@ -28,4 +28,5 @@ const routes = [
 
 export const routerConfig = {
 	routes,
+	strict: true,
 }

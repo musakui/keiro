@@ -59,7 +59,7 @@
 		<div v-else>{{ t('loading') }}</div>
 	</main>
 	<div class="fixed bottom-0 left-0 p-4">
-		<RouterLink to="/places">← {{ t('pageLinks.places') }}</RouterLink>
+		<RouterLink to="/places/">← {{ t('pageLinks.places') }}</RouterLink>
 	</div>
 </template>
 

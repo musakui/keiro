@@ -4,7 +4,7 @@
 		<p>lorem ipsum dolor si amet</p>
 	</main>
 	<div class="fixed bottom-0 right-0 p-4">
-		<RouterLink to="/search">{{ t('pageLinks.search') }} →</RouterLink>
+		<RouterLink to="/search/">{{ t('pageLinks.search') }} →</RouterLink>
 	</div>
 </template>
 

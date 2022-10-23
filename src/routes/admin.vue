@@ -4,7 +4,7 @@
 		<button class="p-2 bg-gray-800" @click="reset">reset db</button>
 	</main>
 	<div class="absolute bottom-0 right-0 p-4">
-		<RouterLink to="/search">search →</RouterLink>
+		<RouterLink to="/search/">search →</RouterLink>
 	</div>
 </template>
 
