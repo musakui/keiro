@@ -1,5 +1,5 @@
 import { init } from './googleMapsScript.js'
-import * as colors from 'virtual:windi-colors'
+import { colors } from '@unocss/preset-mini'
 
 let gmap =/** @type {google.maps.Map} */(null)
 let transitLayer =/** @type {google.maps.TransitLayer} */(null)
@@ -37,20 +37,20 @@ export const bounds = {
 const mapStyle = (featureType, elementType, ...stylers) => ({ featureType, elementType, stylers })
 
 const styles = [
-	mapStyle('all', 'labels.text.stroke', { color: colors.gray900 }),
-	mapStyle('all', 'labels.text.fill', { color: colors.gray100 }),
-	mapStyle('landscape', 'all', { color: colors.gray800 }),
-	mapStyle('water', 'all', { color: colors.slate900 }),
-	mapStyle('poi', 'geometry', { color: colors.cyan900 }),
+	mapStyle('all', 'labels.text.stroke', { color: colors.gray[9] }),
+	mapStyle('all', 'labels.text.fill', { color: colors.gray[1] }),
+	mapStyle('landscape', 'all', { color: colors.gray[8] }),
+	mapStyle('water', 'all', { color: colors.slate[9] }),
+	mapStyle('poi', 'geometry', { color: colors.cyan[9] }),
 	mapStyle('poi', 'labels', { visibility: 'off' }),
-	mapStyle('transit', 'geometry.stroke', { color: colors.green600 }),
-	mapStyle('transit', 'geometry.fill', { color: colors.green900 }),
-	mapStyle('road.highway', 'geometry.stroke', { color: colors.yellow900 }),
+	mapStyle('transit', 'geometry.stroke', { color: colors.green[6] }),
+	mapStyle('transit', 'geometry.fill', { color: colors.green[9] }),
+	mapStyle('road.highway', 'geometry.stroke', { color: colors.yellow[9] }),
 	mapStyle('road.highway', 'geometry.fill', { color: colors.black }),
-	mapStyle('road.arterial', 'geometry.stroke', { color: colors.amber900 }),
+	mapStyle('road.arterial', 'geometry.stroke', { color: colors.amber[9] }),
 	mapStyle('road.arterial', 'geometry.fill', { color: colors.black }),
-	mapStyle('road.local', 'geometry', { color: colors.gray900 }),
-	mapStyle('administrative', 'geometry.stroke', { color: colors.sky900 }),
+	mapStyle('road.local', 'geometry', { color: colors.gray[9] }),
+	mapStyle('administrative', 'geometry.stroke', { color: colors.sky[9] }),
 	mapStyle('administrative', 'geometry.fill', { color: colors.black }),
 	mapStyle('administrative', 'labels', { lightness: -50 }),
 ]
@@ -69,7 +69,7 @@ export const useMap = (el) => {
 		center: base,
 		disableDefaultUI: true,
 		keyboardShortcuts: false,
-		backgroundColor: colors.dark800,
+		backgroundColor: colors.dark[8],
 		restriction: {
 			strictBounds: false,
 			latLngBounds: bounds,

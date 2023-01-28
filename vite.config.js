@@ -2,17 +2,15 @@ import path from 'node:path'
 import { fileURLToPath } from 'url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import windi from 'vite-plugin-windicss'
-import i18n from '@intlify/vite-plugin-vue-i18n'
-import colors from './tools/vite-plugin-windi-colors.js'
+import uno from 'unocss/vite'
+import i18n from '@intlify/unplugin-vue-i18n/vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // https://vitejs.dev/config
 export default defineConfig({
 	plugins: [
-		windi(),
-		colors(),
+		uno(),
 		vue(),
 		i18n({
 			fullInstall: false,
@@ -26,6 +24,11 @@ export default defineConfig({
 	},
 	build: {
 		target: 'esnext',
+	},
+	ssr: {
+		noExternal: [
+			/vue-i18n/,
+		],
 	},
 	ssgOptions: {
 		script: 'async',
